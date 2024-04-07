@@ -1,47 +1,45 @@
 package com.apispringsecurity.Controller;
 
-import com.apispringsecurity.Controller.dto.request.InserirUsuarioRequest;
+import com.apispringsecurity.Service.UsuarioService;
 import com.apispringsecurity.datasource.Entity.UsuarioEntity;
-import com.apispringsecurity.datasource.repository.PerfilRepository;
-import com.apispringsecurity.datasource.repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
 @RestController
-@RequiredArgsConstructor
+@RequestMapping
 public class UsuarioController {
-    private final BCryptPasswordEncoder bCryptEncoder;
-    private final UsuarioRepository usuarioRepository;
-    private final PerfilRepository perfilRepository;
 
-    @PostMapping("cadastro")
-    public ResponseEntity<String> newUser(
-            @RequestBody InserirUsuarioRequest inserirUsuarioRequest
-    ) throws Exception {
-//        PerfilEntity perfilEntity=  perfilRepository.findByNomePerfil("Usuario").get();
-
-        boolean usuarioExistente = usuarioRepository.findByNomeUsuario(inserirUsuarioRequest.nomeUsuario())
-                .isPresent();
-
-        if (usuarioExistente){
-            throw new Exception("Usuario já existe");
-        }
-
-        UsuarioEntity usuario = new UsuarioEntity();
-        usuario.setNomeUsuario(inserirUsuarioRequest.nomeUsuario());
-        usuario.setSenha(bCryptEncoder.encode(inserirUsuarioRequest.senha()).toString());
-//        usuario.setPerfis(Set.of(perfilEntity));
-
-        usuarioRepository.save(usuario);
-
-        return new ResponseEntity<>("Criado", HttpStatus.CREATED);
+    public UsuarioController(UsuarioService service) {
+        this.service = service;
     }
 
+    private final UsuarioService service;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioEntity> getOne(
+            @RequestHeader(name = "Authorization") String token,
+            @PathVariable(name = "id") Long id
+    ){
+        return ResponseEntity.status(HttpStatus.OK).body(service.getEntity(token,id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioEntity> update(
+            @RequestHeader(name = "Authorization") String token,
+            @PathVariable(name = "id") Long id,
+            @RequestBody UsuarioEntity entity
+    ){
+        return ResponseEntity.status(HttpStatus.OK).body(service.update(token,id,entity));
+    }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@RequestHeader(name = "Authorization") String token,
+                                       @PathVariable(name = "id") Long id){
+        service.delete(token,id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
