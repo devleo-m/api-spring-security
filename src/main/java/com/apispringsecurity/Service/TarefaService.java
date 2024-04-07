@@ -2,7 +2,6 @@ package com.apispringsecurity.Service;
 
 import com.apispringsecurity.Controller.dto.request.InserirTarefaRequest;
 import com.apispringsecurity.Controller.dto.response.TarefaResponse;
-import com.apispringsecurity.datasource.Entity.TarefaEntity;
 import com.apispringsecurity.datasource.Entity.UsuarioEntity;
 import com.apispringsecurity.datasource.repository.TarefaRepository;
 import com.apispringsecurity.datasource.repository.UsuarioRepository;

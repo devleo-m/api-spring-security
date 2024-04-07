@@ -2,7 +2,6 @@ package com.apispringsecurity.Controller;
 
 import com.apispringsecurity.Controller.dto.request.LoginRequest;
 import com.apispringsecurity.Controller.dto.response.LoginResponse;
-import com.apispringsecurity.datasource.Entity.PerfilEntity;
 import com.apispringsecurity.datasource.Entity.UsuarioEntity;
 import com.apispringsecurity.datasource.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;

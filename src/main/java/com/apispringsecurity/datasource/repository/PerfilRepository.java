@@ -1,6 +1,5 @@
 package com.apispringsecurity.datasource.repository;
 
-import com.apispringsecurity.datasource.Entity.PerfilEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
