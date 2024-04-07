@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface NotaRepository extends JpaRepository<NotaEntity, Long> {
 
-
     @Transactional
     @Modifying
     @Query(value = "select * from nota where  usuario_id  = :usuarioId", nativeQuery = true)
@@ -20,7 +19,4 @@ public interface NotaRepository extends JpaRepository<NotaEntity, Long> {
     @Modifying
     @Query(value = "select * from nota where  usuario_id  = :usuarioId and caderno_id = :cadernoId", nativeQuery = true)
     List<NotaEntity> findAllByUsuarioAndCaderno(Long usuarioId, Long cadernoId);
-
-
-
 }
