@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
     public UsuarioController(UsuarioService service) {

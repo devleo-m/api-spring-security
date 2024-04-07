@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("cadernos")
+@RequestMapping("/cadernos")
 public class CadernoController {
 
     public CadernoController(CadernoService service) {
@@ -18,12 +18,12 @@ public class CadernoController {
 
     private final CadernoService service;
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<List<CadernoEntity>> getAll(@RequestHeader(name = "Authorization") String token){
         return ResponseEntity.status(HttpStatus.OK).body(service.getEntities(token));
     }
 
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<CadernoEntity> create(@RequestHeader(name = "Authorization") String token,
                                                 @RequestBody CadernoEntity entity){
         return ResponseEntity.status(HttpStatus.OK).body(service.create(token,entity));

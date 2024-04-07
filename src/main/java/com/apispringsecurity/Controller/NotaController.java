@@ -32,10 +32,15 @@ public class NotaController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getEntity(token,id));
     }
 
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<NotaEntity> create(@RequestHeader(name = "Authorization") String token,
-                                             @RequestBody NotaEntity entity){
-        return ResponseEntity.status(HttpStatus.OK).body(service.create(token,entity));
+                                             @RequestBody NotaEntity entity) {
+        try {
+            NotaEntity notaEntity = service.create(token, entity);
+            return ResponseEntity.status(HttpStatus.OK).body(notaEntity);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @PutMapping("/{id}")

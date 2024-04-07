@@ -31,9 +31,11 @@ public class NotaServiceImpl implements NotaService {
     }
 
     @Override
-    public NotaEntity create(String token, NotaEntity entity){
-        usuarioRepository.findById(entity.getUsuario().getUsuario_id()).orElseThrow(() -> new BadRequestException("Elemento associado não existe"));
-        cadernoRepository.findById(entity.getCaderno().getCaderno_id()).orElseThrow(() -> new BadRequestException("Elemento associado não existe"));
+    public NotaEntity create(String token, NotaEntity entity) {
+        usuarioRepository.findById(entity.getUsuario().getUsuario_id())
+                .orElseThrow(() -> new BadRequestException("Elemento associado não existe"));
+        cadernoRepository.findById(entity.getCaderno().getCaderno_id())
+                .orElseThrow(() -> new BadRequestException("Elemento associado não existe"));
         return repository.save(entity);
     }
 
