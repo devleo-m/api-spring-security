@@ -7,90 +7,62 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "usuario")
 @Data
-// implementando o UserDetails que vem do Spring Security
-// com a finalidade de sobreecreve o User Interno do Security
-// sou obrigado a implementar os métodos do UserDetails
-public class UsuarioEntity implements UserDetails {
 
+public class UsuarioEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usuario_id")
-    private Long id;
+    private long usuario_id;
 
-    @Column(unique = true)
-    private String nomeUsuario;
+    @Column(name = "nome", columnDefinition = "varchar(255)")
+    private String nome;
+    @Column(name = "login", columnDefinition = "varchar(255) not null", unique = true)
+    private String login;
+    @Column(name = "senha", columnDefinition = "varchar(255) not null")
     private String senha;
 
-    // Esse relacionamento não gera colunas na tabela usuário
-    // Ele gera uma tabela nova entre usuário e perfil
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "usuarios_papeis",
-            joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "perfil_id")
-    )
-    private Set<PerfilEntity> perfis;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<CadernoEntity> cadernos;
 
-//    @OneToMany(cascade = CascadeType.REMOVE)
-//    private List<TarefaEntity> tarefas;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<NotaEntity> notas;
 
-
-    public boolean senhaValida(LoginRequest loginRequest, BCryptPasswordEncoder bCryptEncoder) {
-        return bCryptEncoder.matches(
-                loginRequest.senha(),
-                this.senha
-        );
+    public long getUsuario_id() {
+        return usuario_id;
     }
 
-
-    /*
-     * Métodos do User Details
-     *  Sobreecrever os métodos com os nossos dados
-     *  Esses métodos são lidos pelo Security
-     */
-    @Override // Perfis de acesso
-    // A collection resultante desse método deve extender a interface GrantedAuthority
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.getPerfis();
+    public void setUsuario_id(long usuario_id) {
+        this.usuario_id = usuario_id;
     }
 
-    @Override
-    public String getPassword() {
-        return this.getSenha();
+    public String getNome() {
+        return nome;
     }
 
-    @Override
-    public String getUsername() {
-        return this.getNomeUsuario();
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    @Override // Se a conta expira -> false
-    // a conta não expira -> true
-    public boolean isAccountNonExpired() {
-        return true;
+    public String getLogin() {
+        return login;
     }
 
-    @Override// Se a conta está travada -> true
-    // a conta não está travada -> false
-    public boolean isAccountNonLocked() {
-        return false;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    @Override// Se a credencial expira -> false -> senha expira ?
-    // a credencial não expira -> true
-    public boolean isCredentialsNonExpired() {
-        return true;
+    public String getSenha() {
+        return senha;
     }
 
-    @Override
-    // conta ativa ou não
-    public boolean isEnabled() {
-        return true;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }
