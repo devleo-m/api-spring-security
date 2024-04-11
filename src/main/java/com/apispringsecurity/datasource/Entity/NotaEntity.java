@@ -24,11 +24,11 @@ public class NotaEntity implements Serializable {
 
     @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
     private UsuarioEntity usuario;
 
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "caderno_id", nullable = false)
+    @JoinColumn(name = "id_caderno", nullable = false)
     private CadernoEntity caderno;
 }
