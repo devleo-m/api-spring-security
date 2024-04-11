@@ -41,8 +41,11 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth //indicar qual é o comportamento de cada enpoint HTTP
-                        .requestMatchers(HttpMethod.POST,"/login").permitAll() // o "/login" com o método POST não requer token
-                        .requestMatchers(HttpMethod.POST,"/cadastro").permitAll()
+                        .requestMatchers("/test").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/login","/registrar").permitAll()
+
+//                        .requestMatchers(HttpMethod.POST,"/login").permitAll() // o "/login" com o método POST não requer token
+//                        .requestMatchers(HttpMethod.POST,"/cadastro").permitAll()
                         .anyRequest().authenticated() // Qualquer outro endpoint irá requerer o token gerado no /login
                 )
                 .csrf(AbstractHttpConfigurer::disable)
