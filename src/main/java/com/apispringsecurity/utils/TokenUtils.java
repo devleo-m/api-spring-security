@@ -61,7 +61,6 @@ public class TokenUtils {
         return token.replace("Bearer ", "");
     }
 
-
     public static boolean senhaValida(String usuarioSenha, String requestSenha) {
         return (new BCryptPasswordEncoder()).matches(
                 usuarioSenha,

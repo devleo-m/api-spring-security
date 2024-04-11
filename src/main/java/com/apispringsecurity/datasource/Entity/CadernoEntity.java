@@ -14,17 +14,17 @@ public class CadernoEntity  implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long caderno_id;
+    private long id_caderno;
 
     @Column(name = "nome", columnDefinition = "varchar(255)", nullable = false)
-    private String nome;
+    private String nome_caderno;
 
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "id_usuario", nullable = false)
     private UsuarioEntity usuario;
 
 
-    @OneToMany(mappedBy = "caderno", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "nota", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER) //caderno
     private List<NotaEntity> notas;
 }

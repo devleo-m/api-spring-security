@@ -12,21 +12,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "usuario")
-@Data
-
 public class UsuarioEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long usuario_id;
+    private long id_usuario;
 
-    @Column(name = "nome", columnDefinition = "varchar(255)")
-    private String nome;
-    @Column(name = "login", columnDefinition = "varchar(255) not null", unique = true)
-    private String login;
-    @Column(name = "senha", columnDefinition = "varchar(255) not null")
-    private String senha;
+    @Column(unique = true, nullable = false)
+    private String nome_usuario;
+    private String login_usuario;
+    private String senha_usuario;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<CadernoEntity> cadernos;
@@ -34,35 +31,44 @@ public class UsuarioEntity implements Serializable {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<NotaEntity> notas;
 
-    public long getUsuario_id() {
-        return usuario_id;
+    /*senhaValida
+    *
+    *Valida login com a senha criptografada salva no banco
+    */
+
+    public boolean senhaValida(LoginRequest loginRequest, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        return bCryptPasswordEncoder.matches(loginRequest.senha(), this.senha_usuario);
     }
 
-    public void setUsuario_id(long usuario_id) {
-        this.usuario_id = usuario_id;
+    public long getUsuario_id() {
+        return id_usuario;
+    }
+
+    public void setUsuario_id(long id_usuario) {
+        this.id_usuario = id_usuario;
     }
 
     public String getNome() {
-        return nome;
+        return nome_usuario;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome(String nome_usuario) {
+        this.nome_usuario = nome_usuario;
     }
 
     public String getLogin() {
-        return login;
+        return login_usuario;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setLogin(String login_usuario) {
+        this.login_usuario = login_usuario;
     }
 
     public String getSenha() {
-        return senha;
+        return senha_usuario;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setSenha(String senha_usuario) {
+        this.senha_usuario = senha_usuario;
     }
 }
