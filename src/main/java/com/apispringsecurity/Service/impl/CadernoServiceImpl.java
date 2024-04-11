@@ -67,8 +67,8 @@ public class CadernoServiceImpl implements CadernoService {
                 throw new ForbiddenException("Erro na autenticação");
             }
 
-            if (entity.getNome() != null &&  !entity.getNome().isEmpty()){
-                cadernoEntity.setNome(entity.getNome());
+            if (entity.getNome_caderno() != null &&  !entity.getNome_caderno().isEmpty()){
+                cadernoEntity.setNome_caderno(entity.getNome_caderno());
             }
 
             return repository.save(cadernoEntity);

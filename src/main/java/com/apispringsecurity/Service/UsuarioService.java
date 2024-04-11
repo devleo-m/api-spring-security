@@ -4,10 +4,9 @@ import com.apispringsecurity.datasource.Entity.UsuarioEntity;
 
 public interface UsuarioService {
 
-    public void delete(String token,Long id);
-    public UsuarioEntity update (String token,Long id,UsuarioEntity entity);
-    public UsuarioEntity getEntity (String token,Long id);
-
+    void delete(String token,Long id);
+    UsuarioEntity update (String token,Long id,UsuarioEntity entity);
+    UsuarioEntity getEntity (String token,Long id);
 
     UsuarioEntity registrar(UsuarioEntity dto);
 
