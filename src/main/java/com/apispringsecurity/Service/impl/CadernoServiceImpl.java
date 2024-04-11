@@ -8,28 +8,25 @@ import com.apispringsecurity.exceptions.Error.BadRequestException;
 import com.apispringsecurity.exceptions.Error.ForbiddenException;
 import com.apispringsecurity.utils.TokenUtils;
 //import org.apache.tomcat.util.json.ParseException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class CadernoServiceImpl implements CadernoService {
 
     private final CadernoRepository repository;
     private final UsuarioRepository usuarioRepository;
-
     private final JwtDecoder jwtDecoder;
-    public CadernoServiceImpl(CadernoRepository repository,UsuarioRepository usuarioRepository,JwtDecoder jwtDecoder) {
-        this.repository = repository;
-        this.usuarioRepository = usuarioRepository;
-        this.jwtDecoder = jwtDecoder;
-    }
 
     @Override
     public CadernoEntity create(String token, CadernoEntity entity) {
-        usuarioRepository.findById(entity.getUsuario().getUsuario_id()).orElseThrow(() -> new BadRequestException("Elemento associado não existe"));
+        usuarioRepository.findById(entity.getUsuario()
+                .getUsuario_id()).orElseThrow(() -> new BadRequestException("Elemento associado não existe"));
         return repository.save(entity);
     }
 

@@ -40,35 +40,4 @@ public class UsuarioEntity implements Serializable {
         return bCryptPasswordEncoder.matches(loginRequest.senha(), this.senha_usuario);
     }
 
-    public long getUsuario_id() {
-        return id_usuario;
-    }
-
-    public void setUsuario_id(long id_usuario) {
-        this.id_usuario = id_usuario;
-    }
-
-    public String getNome() {
-        return nome_usuario;
-    }
-
-    public void setNome(String nome_usuario) {
-        this.nome_usuario = nome_usuario;
-    }
-
-    public String getLogin() {
-        return login_usuario;
-    }
-
-    public void setLogin(String login_usuario) {
-        this.login_usuario = login_usuario;
-    }
-
-    public String getSenha() {
-        return senha_usuario;
-    }
-
-    public void setSenha(String senha_usuario) {
-        this.senha_usuario = senha_usuario;
-    }
 }

@@ -9,12 +9,14 @@ import com.apispringsecurity.exceptions.Error.BadRequestException;
 import com.apispringsecurity.exceptions.Error.ForbiddenException;
 import com.apispringsecurity.utils.TokenUtils;
 //import org.apache.tomcat.util.json.ParseException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class NotaServiceImpl implements NotaService {
 
@@ -23,19 +25,14 @@ public class NotaServiceImpl implements NotaService {
     private final UsuarioRepository usuarioRepository;
     private final JwtDecoder jwtDecoder;
 
-    public NotaServiceImpl(NotaRepository repository,CadernoRepository cadernoRepository, UsuarioRepository usuarioRepository,JwtDecoder jwtDecoder) {
-        this.repository = repository;
-        this.cadernoRepository = cadernoRepository;
-        this.usuarioRepository = usuarioRepository;
-        this.jwtDecoder = jwtDecoder;
-    }
-
     @Override
-    public NotaEntity create(String token, NotaEntity entity) {
-        usuarioRepository.findById(entity.getUsuario().getUsuario_id())
-                .orElseThrow(() -> new BadRequestException("Elemento associado não existe"));
-        cadernoRepository.findById(entity.getCaderno().getCaderno_id())
-                .orElseThrow(() -> new BadRequestException("Elemento associado não existe"));
+    public NotaEntity create(String token,NotaEntity entity) {
+        usuarioRepository.findById(entity.getUsuario()
+                .getId_usuario())
+                .orElseThrow(() -> new BadRequestException("Usuario não existe"));
+        cadernoRepository.findById(entity.getCaderno()
+                .getId_caderno())
+                .orElseThrow(() -> new BadRequestException("Caderno não existe"));
         return repository.save(entity);
     }
 
@@ -47,7 +44,7 @@ public class NotaServiceImpl implements NotaService {
             token = TokenUtils.recoverToken(token);
             TokenUtils.TokenAttributes attributes = TokenUtils.parseToken(token);
 
-            if(notaEntity.getUsuario().getUsuario_id() !=  Long.parseLong(attributes.getSubject())){
+            if(notaEntity.getUsuario().getId_usuario() !=  Long.parseLong(attributes.getSubject())){
                 throw new ForbiddenException("Erro na autenticação");
             }
 
@@ -63,15 +60,15 @@ public class NotaServiceImpl implements NotaService {
     public NotaEntity update(String token,Long id, NotaEntity entity) {
 
         try{
-            var notaEntity = repository.findById(id).orElseThrow(() -> new BadRequestException("Elemento não encontrado"));
+            var notaEntity = repository.findById(id)
+                    .orElseThrow(() -> new BadRequestException("Nota não encontrada"));
 
             token = TokenUtils.recoverToken(token);
             TokenUtils.TokenAttributes attributes = TokenUtils.parseToken(token);
 
-            if(notaEntity.getUsuario().getUsuario_id() !=  Long.parseLong(attributes.getSubject())){
+            if(notaEntity.getUsuario().getId_usuario() !=  Long.parseLong(attributes.getSubject())){
                 throw new ForbiddenException("Erro na autenticação");
             }
-
 
             if (entity.getTitulo() != null &&  !entity.getTitulo().isEmpty()){
                 notaEntity.setTitulo(entity.getTitulo());
@@ -91,12 +88,13 @@ public class NotaServiceImpl implements NotaService {
     @Override
     public NotaEntity getEntity(String token,Long id) {
         try{
-            var nota = repository.findById(id).orElseThrow(() -> new BadRequestException("Elemento não encontrado"));
+            var nota = repository.findById(id)
+                    .orElseThrow(() -> new BadRequestException("Nota não encontrada"));
 
             token = TokenUtils.recoverToken(token);
             TokenUtils.TokenAttributes attributes = TokenUtils.parseToken(token);
 
-            if(nota.getUsuario().getUsuario_id() !=  Long.parseLong(attributes.getSubject())){
+            if(nota.getUsuario().getId_usuario() !=  Long.parseLong(attributes.getSubject())){
                 throw new ForbiddenException("Erro na autenticação");
             }
 
